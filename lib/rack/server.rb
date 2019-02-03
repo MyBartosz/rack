@@ -53,11 +53,11 @@ module Rack
             options[:server] = s
           }
 
-          opts.on("-o", "--host HOST", "listen on HOST (default: localhost)") { |host|
+          opts.on("-o", "--host HOST", "listen on HOST (default: ENV['RACK_HOST'] || localhost)") { |host|
             options[:Host] = host
           }
 
-          opts.on("-p", "--port PORT", "use PORT (default: 9292)") { |port|
+          opts.on("-p", "--port PORT", "use PORT (default: ENV['RACK_PORT'] || 9292)") { |port|
             options[:Port] = port
           }
 
@@ -233,12 +233,12 @@ module Rack
 
     def default_options
       environment  = ENV['RACK_ENV'] || 'development'
-      default_host = environment == 'development' ? 'localhost' : '0.0.0.0'
+      default_host = ENV['RACK_HOST'] || (environment == 'development' ? 'localhost' : '0.0.0.0')
 
       {
         environment: environment,
         pid: nil,
-        Port: 9292,
+        Port: (ENV['RACK_PORT'] || 9292),
         Host: default_host,
         AccessLog: [],
         config: "config.ru"
